@@ -221,3 +221,6 @@ section.your-active-class .landing__container::after {
 		           rotate(-360deg);
 	}
 }
+
+/* Call to JavaScript */
+  <script src="app.js"></script>
