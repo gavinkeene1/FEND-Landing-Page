@@ -33,6 +33,10 @@
  *
 */
 // build the nav
+/* This For Loop runs through index.html to dynamically add an element
+to navbar__list for each section found in the HTML. Based on the
+section being iterated over, the Loop also populates the newly created
+element with the section name as it appears on the webpage.*/
 let navbar = document.getElementById('navbar__list');
 document.body.prepend(navbar);
 let sections = document.getElementsByTagName("section");
@@ -44,7 +48,11 @@ for (let i = 1; i < (sections.length + 1); i++) {
   console.log("listElement" + i + " created");
   newItem.id = i;
   console.log("listElement" + i + " ID is set");
-  newItem.innerHTML = `<a href=#section` + newItem.id + `>` + `Section ` + i + `</a>`;
+//The following code will still need to be changed to accomodate sections
+//with other than ("section" + i)
+//  newItem.innerHTML = `<a href=#section` + newItem.id + `>` + `Section `
+//  + i + `</a>`;
+newItem.innerHTML = `<a href=#section` + newItem.id + `>` + sections[i-1].dataset.nav + `</a>`;
   navbar.appendChild(newItem);
 }
 
@@ -67,5 +75,3 @@ console.log("JS Reached Point 1")
 // Build menu
 
 // Scroll to section on link click
-
-// Set sections as active
