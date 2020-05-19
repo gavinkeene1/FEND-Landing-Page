@@ -40,33 +40,79 @@ element with the section name as it appears on the webpage.*/
 let navbar = document.getElementById('navbar__list');
 let sections = document.getElementsByTagName("section");
 for (let i = 1; i < (sections.length + 1); i++) {
-  console.log(sections[i]);
   let listItem = i;
-  console.log(listItem);
   let newItem = document.createElement('li');
-  console.log("listElement" + i + " created");
 //  newItem.id = i;
-  console.log("listElement" + i + " ID is set");
 /*Use the upward-counting local variable "i" to give each Navbar
 element a link reference to its corresponding section in the HTML.*/
 newItem.innerHTML = `<a href=#section` + /*newItem.id*/ i + `
-class="navbar__menu  menu__link` + ` class` + `"` + `>` + sections[i-1].dataset.nav +
+class="navbar__menu  menu__link">` + sections[i-1].dataset.nav +
 `</a>`;
 
-newItem.addEventListener("click",function() {
-  let current = document.getElementsByClassName("active");
+  newItem.addEventListener("click", function() {
+    let current = document.getElementsByClassName("active");
 
-  //If there is no active class:
-  if (current.length > 0) {
-    current[0].className = current[0].className.replace(" active", "");
+    //If there is no active class:
+    if (current.length > 0) {
+      current[0].className = current[0].className.replace(" active", "");
+    }
+
+    //Add the active class to the current/clicked button
+    this.className += " active";
+  });
+
+  navbar.appendChild(newItem);
   }
 
-  //Add the active class to the current/clicked button
-  this.className += " active";
-})
+//Create scroll function taking into account a section's position.
+//For the moment, this is not a for loop or other kind of function
+//to iterate over sections, but rather just checks coordinates
+//of one section passed into the function.
+function smoothScroll(section, duration) {
+  console.log("Section is " + section);
+  let scrollTarget = document.getElementById('section3');
+  console.log(scrollTarget);
+  let targetPosition = scrollTarget.getBoundingClientRect().top;
+  console.log("targetPosition " + targetPosition);
+  let startPosition = window.pageYOffset;
+  console.log("startPosition " + startPosition);
+  let distance = targetPosition - startPosition;
+  console.log("distance " + distance);
+  let startTime = null;
+  console.log("startTime intentionally set to " + startTime);
 
-navbar.appendChild(newItem);
+  function animation(currentTime) {
+    if (startTime === null) {
+      console.log("startTime is indeed null");
+      startTime = currentTime;
+      console.log("startTime is " + startTime);
+      let timeElapsed = currentTime - startTime;
+      console.log("timeElapsed is instant: " + timeElapsed);
+      let run = ease(timeElapsed, startPosition, targetPosition, duration);
+      console.log("The run position is " + run);
+      window.scrollTo(0, run);
+      console.log("The scrollTo should have just run");
+      if (timeElapsed < duration) {
+        requestAnimationFrame(animation);
+      }
+    }
+  }
+
+
+  function ease(t, b, c, d) {
+    t /= d / 2;
+    if (t < 1) {
+      return c / 2 * t * t + b;
+      t--;
+    }
+    return -c / 2 * (t * (t - 2) - 1) + b;
+  }
+
+  window.requestAnimationFrame(animation);
+  console.log("targetPosition at bottom is " + targetPosition);
 }
+
+smoothScroll('#section2', 1000);
 
 console.log("JS Reached Point 1");
 
