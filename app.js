@@ -47,7 +47,23 @@ for (let i = 1; i < (sections.length + 1); i++) {
   console.log("listElement" + i + " created");
 //  newItem.id = i;
   console.log("listElement" + i + " ID is set");
-newItem.innerHTML = `<a href=#section` + /*newItem.id*/ i + ` class="navbar__menu  menu__link"` + `>` + sections[i-1].dataset.nav + `</a>`;
+/*Use the upward-counting local variable "i" to give each Navbar
+element a link reference to its corresponding section in the HTML.*/
+newItem.innerHTML = `<a href=#section` + /*newItem.id*/ i + `
+class="navbar__menu  menu__link` + ` class` + `"` + `>` + sections[i-1].dataset.nav +
+`</a>`;
+
+newItem.addEventListener("click",function() {
+  let current = document.getElementsByClassName("active");
+
+  //If there is no active class:
+  if (current.length > 0) {
+    current[0].className = current[0].className.replace(" active", "");
+  }
+
+  //Add the active class to the current/clicked button
+  this.className += " active";
+})
 
 navbar.appendChild(newItem);
 }
@@ -58,7 +74,6 @@ console.log("JS Reached Point 1");
 
 
 // Scroll to anchor ID using scrollTO event
-
 
 /**
  * End Main Functions
