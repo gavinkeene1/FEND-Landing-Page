@@ -89,6 +89,12 @@ section {
     transition: ease 0.3s all;
 }
 
+.active {
+  background-color: #8fd3fe;
+  color: #fff;
+
+}
+
 /* Header Styles */
 .page__header {
     background: #fff;
