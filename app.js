@@ -62,6 +62,7 @@ class="navbar__menu  menu__link">` + sections[i-1].dataset.nav +
   });
 
   navbar.appendChild(newItem);
+
   }
 
 //Create scroll function taking into account a section's position.
@@ -69,37 +70,49 @@ class="navbar__menu  menu__link">` + sections[i-1].dataset.nav +
 //to iterate over sections, but rather just checks coordinates
 //of one section passed into the function.
 function smoothScroll(section, duration) {
-  console.log("Section is " + section);
+  console.log("smoothScroll starting");
+  //console.log("Section is " + section);
   let scrollTarget = document.getElementById('section3');
-  console.log(scrollTarget);
+  //console.log(scrollTarget);
   let targetPosition = scrollTarget.getBoundingClientRect().top;
-  console.log("targetPosition " + targetPosition);
+  //console.log("targetPosition " + targetPosition);
   let startPosition = window.pageYOffset;
-  console.log("startPosition " + startPosition);
+  //console.log("startPosition " + startPosition);
   let distance = targetPosition - startPosition;
-  console.log("distance " + distance);
+  //console.log("distance " + distance);
   let startTime = null;
-  console.log("startTime intentionally set to " + startTime);
+  //console.log("startTime intentionally set to " + startTime);
 
   function animation(currentTime) {
+    console.log("animation starting");
     if (startTime === null) {
-      console.log("startTime is indeed null");
+      //console.log("startTime is indeed null");
       startTime = currentTime;
-      console.log("startTime is " + startTime);
+      //console.log("startTime is " + startTime);
       let timeElapsed = currentTime - startTime;
-      console.log("timeElapsed is instant: " + timeElapsed);
+      //console.log("timeElapsed is instant: " + timeElapsed);
       let run = ease(timeElapsed, startPosition, targetPosition, duration);
-      console.log("The run position is " + run);
-      window.scrollTo(0, run);
-      console.log("The scrollTo should have just run");
+      //console.log("The run position is " + run);
+      console.log("Run is " + run);
+      console.log("I'm giving the Run to scrollTo()");
+      setTimeout(function() {
+        window.scrollTo(0, 400);
+        console.log("trying after timeout");
+      }, 1000);
+      console.log("Post-scrollTo run is " + run);
+      //console.log("The scrollTo should have just run");
       if (timeElapsed < duration) {
         requestAnimationFrame(animation);
       }
     }
+    else {
+    console.log("Oops. animation stops.");
+  }
   }
 
 
   function ease(t, b, c, d) {
+    console.log("ease starting");
     t /= d / 2;
     if (t < 1) {
       return c / 2 * t * t + b;
@@ -109,17 +122,45 @@ function smoothScroll(section, duration) {
   }
 
   window.requestAnimationFrame(animation);
-  console.log("targetPosition at bottom is " + targetPosition);
+  //console.log("targetPosition at bottom is " + targetPosition);
 }
 
-smoothScroll('#section2', 1000);
+// Scroll to anchor ID using scrollTO event
 
 console.log("JS Reached Point 1");
 
+// Get all sections (by their anchor links) on the page
+const anchorLinks = document.querySelectorAll('a[href^="#"]');
+//console.log(anchorLinks);
+
+anchorLinks.forEach(link => {
+  //Get the scrollTarget by getting the section's href value
+  let scrollTarget = link.getAttribute('href');
+  //console.log(scrollTarget);
+  // When a section's navbar element is clicked
+  link.addEventListener('click', (event) => {
+    // First, prevent the href behavior from jumping directly to
+    // scrollTarget without actually scrolling
+    event.preventDefault();
+    //console.log("Clicked " + scrollTarget + " - preventDefault applied");
+    // Make a section active when clicked
+    let current = document.getElementsByClassName("active");
+
+    //If there is no active class:
+    if (current.length > 0) {
+      current[0].className = current[0].className.replace(" active", "");
+    }
+
+    //Add the active class to the current/clicked button
+    this.className += " active";
+    // Call the smoothScroll Function
+    console.log("trying smoothScroll now:");
+    smoothScroll(scrollTarget, 1000);
+  })
+})
+
 // Add class 'active' to section when near top of viewport
 
-
-// Scroll to anchor ID using scrollTO event
 
 /**
  * End Main Functions
