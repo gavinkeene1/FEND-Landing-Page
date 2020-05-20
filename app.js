@@ -72,7 +72,7 @@ class="navbar__menu  menu__link">` + sections[i-1].dataset.nav +
 function smoothScroll(section, duration) {
   console.log("smoothScroll starting");
   //console.log("Section is " + section);
-  let scrollTarget = document.getElementById('section3');
+  let scrollTarget = document.getElementById('section4');
   //console.log(scrollTarget);
   let targetPosition = scrollTarget.getBoundingClientRect().top;
   //console.log("targetPosition " + targetPosition);
@@ -91,34 +91,53 @@ function smoothScroll(section, duration) {
       //console.log("startTime is " + startTime);
       let timeElapsed = currentTime - startTime;
       //console.log("timeElapsed is instant: " + timeElapsed);
-      let run = ease(timeElapsed, startPosition, targetPosition, duration);
-      //console.log("The run position is " + run);
-      console.log("Run is " + run);
-      console.log("I'm giving the Run to scrollTo()");
-      setTimeout(function() {
-        window.scrollTo(0, 400);
-        console.log("trying after timeout");
-      }, 1000);
-      console.log("Post-scrollTo run is " + run);
-      //console.log("The scrollTo should have just run");
-      if (timeElapsed < duration) {
-        requestAnimationFrame(animation);
+      let yCoord = yCoordinate(timeElapsed, startPosition, distance, duration, targetPosition);
+      //console.log("The yCoord position is " + yCoord);
+      //console.log("yCoord is " + yCoord);
+      //console.log("I'm giving the yCoord to scrollTo()");
+      if(yCoord !== 0) {
+        setTimeout(function() {
+          console.log("yCoord is not 0, it is " + yCoord);
+          window.scrollTo(0, yCoord);
+          console.log("trying after timeout");
+        }, 200);
+        //console.log("The scrollTo should have just yCoord");
+        if (timeElapsed < duration) {
+          requestAnimationFrame(animation);
+        }
+      }
+      else if (yCoord === 0) {
+          console.log("yCoord is equal to 0");
+          setTimeout(function() {
+            window.scrollTo(0, yCoord);
+            console.log("trying after timeout");
+          }, 200);
+          //console.log("The scrollTo should have just yCoord");
+          if (timeElapsed < duration) {
+            requestAnimationFrame(animation);
+          }
       }
     }
-    else {
-    console.log("Oops. animation stops.");
-  }
   }
 
-
-  function ease(t, b, c, d) {
-    console.log("ease starting");
-    t /= d / 2;
-    if (t < 1) {
-      return c / 2 * t * t + b;
-      t--;
+// The yCoordinate function returns the y-coordinate of the right
+// section that the page should scroll to when a Navbar item is
+// clicked.
+  function yCoordinate(t, b, c, d, e) {
+    console.log(t + " " + b + " " + c + " " + d);
+    console.log("yCoordinate starting");
+    // When the page sits at y = 0 (top of the page), simply jump
+    // to the desired y-coordinate which is "distance" away from 0.
+    if (b === 0) {
+      return c;
     }
-    return -c / 2 * (t * (t - 2) - 1) + b;
+    // When the page has been scrolled down at all, factor in a new
+    // startPosition to get the accurate y-coordinate of the target
+    else if (b > 0) {
+      console.log("non-zero y is " + b);
+      console.log("distance to target is " + c);
+      return (b+e);
+      }
   }
 
   window.requestAnimationFrame(animation);
@@ -126,8 +145,6 @@ function smoothScroll(section, duration) {
 }
 
 // Scroll to anchor ID using scrollTO event
-
-console.log("JS Reached Point 1");
 
 // Get all sections (by their anchor links) on the page
 const anchorLinks = document.querySelectorAll('a[href^="#"]');
@@ -154,7 +171,8 @@ anchorLinks.forEach(link => {
     //Add the active class to the current/clicked button
     this.className += " active";
     // Call the smoothScroll Function
-    console.log("trying smoothScroll now:");
+    //console.log("trying smoothScroll now:");
+    //Remember, scrollTarget will be whichever Navbar Item is clicked
     smoothScroll(scrollTarget, 1000);
   })
 })
