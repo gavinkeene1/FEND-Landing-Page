@@ -99,8 +99,10 @@ function smoothScroll(section, duration) {
   console.log("Section is " + section);
   let wordyword = section;
   console.log(wordyword);
-
   let scrollTarget = document.querySelector(wordyword);
+  scrollTarget.scrollIntoView({
+    behavior: 'smooth'
+  });
   console.log(scrollTarget);
   let targetPosition = scrollTarget.getBoundingClientRect().top;
   //console.log("targetPosition " + targetPosition);
@@ -111,7 +113,7 @@ function smoothScroll(section, duration) {
   let startTime = null;
   //console.log("startTime intentionally set to " + startTime);
 
-  function animation(currentTime) {
+  /*function animation(currentTime) {
     console.log("animation starting");
     if (startTime === null) {
       //console.log("startTime is indeed null");
@@ -128,7 +130,7 @@ function smoothScroll(section, duration) {
           console.log("yCoord is not 0, it is " + yCoord);
           window.scrollTo(0, yCoord);
           console.log("trying after timeout");
-        }, 200);
+        }, 250);
         //console.log("The scrollTo should have just yCoord");
         if (timeElapsed < duration) {
           requestAnimationFrame(animation);
@@ -139,14 +141,14 @@ function smoothScroll(section, duration) {
           setTimeout(function() {
             window.scrollTo(0, yCoord);
             console.log("trying after timeout");
-          }, 200);
+          }, 250);
           //console.log("The scrollTo should have just yCoord");
           if (timeElapsed < duration) {
             requestAnimationFrame(animation);
           }
       }
     }
-  }
+  }*/
 
 // The yCoordinate function returns the y-coordinate of the right
 // section that the page should scroll to when a Navbar item is
@@ -168,7 +170,7 @@ function smoothScroll(section, duration) {
       }
   }
 
-  window.requestAnimationFrame(animation);
+//  window.requestAnimationFrame(animation);
   //console.log("targetPosition at bottom is " + targetPosition);
 }
 
@@ -195,7 +197,6 @@ anchorLinks.forEach(link => {
     smoothScroll(scrollTarget, 1000);
   })
 })
-
 // Add class 'active' to section when near top of viewport
 
 
