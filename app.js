@@ -39,17 +39,44 @@ section being iterated over, the Loop also populates the newly created
 element with the section name as it appears on the webpage.*/
 let navbar = document.getElementById('navbar__list');
 let sections = document.getElementsByTagName("section");
+
 for (let i = 1; i < (sections.length + 1); i++) {
   let listItem = i;
-  let newItem = document.createElement('li');
-//  newItem.id = i;
+  let navListItem = document.createElement('li');
+  let navAnchor = document.createElement('a');
+
+  navbar.appendChild(navListItem);
+  navListItem.appendChild(navAnchor);
+
+  navAnchor.href = "#section" + i;
+  navAnchor.text = sections[i-1].dataset.nav;
+  navAnchor.classList.add('navbar__menu');
+  navAnchor.classList.add('menu__link');
+
+  navListItem.addEventListener("click", function() {
+    let activeItems = document.getElementsByClassName("active");
+
+    // Toggle active classes based on the status of the anchor being
+    // clicked and the status of the other anchors. First, if some
+    // other anchor is active, remove its "active" class.
+    if (activeItems.length > 0) {
+      activeItems[0].className = activeItems[0].className.replace("active", "");
+    }
+
+    // After clearing the navbar of previous "active" statuses (if
+    // applicable), add an "active" class to the navbar link that's
+    // been clicked.
+    this.className += "active";
+  });
+
+//  navListItem.id = i;
 /*Use the upward-counting local variable "i" to give each Navbar
 element a link reference to its corresponding section in the HTML.*/
-newItem.innerHTML = `<a href=#section` + /*newItem.id*/ i + `
+/*navListItem.innerHTML = `<a href=#section` + /*navListItem.id*//* i + `
 class="navbar__menu  menu__link">` + sections[i-1].dataset.nav +
 `</a>`;
 
-  newItem.addEventListener("click", function() {
+  navListItem.addEventListener("click", function() {
     let current = document.getElementsByClassName("active");
 
     //If there is no active class:
@@ -59,9 +86,7 @@ class="navbar__menu  menu__link">` + sections[i-1].dataset.nav +
 
     //Add the active class to the current/clicked button
     this.className += " active";
-  });
-
-  navbar.appendChild(newItem);
+  });*/
 
   }
 
@@ -71,9 +96,12 @@ class="navbar__menu  menu__link">` + sections[i-1].dataset.nav +
 //of one section passed into the function.
 function smoothScroll(section, duration) {
   console.log("smoothScroll starting");
-  //console.log("Section is " + section);
-  let scrollTarget = document.getElementById('section4');
-  //console.log(scrollTarget);
+  console.log("Section is " + section);
+  let wordyword = section;
+  console.log(wordyword);
+
+  let scrollTarget = document.querySelector(wordyword);
+  console.log(scrollTarget);
   let targetPosition = scrollTarget.getBoundingClientRect().top;
   //console.log("targetPosition " + targetPosition);
   let startPosition = window.pageYOffset;
@@ -160,19 +188,10 @@ anchorLinks.forEach(link => {
     // scrollTarget without actually scrolling
     event.preventDefault();
     //console.log("Clicked " + scrollTarget + " - preventDefault applied");
-    // Make a section active when clicked
-    let current = document.getElementsByClassName("active");
-
-    //If there is no active class:
-    if (current.length > 0) {
-      current[0].className = current[0].className.replace(" active", "");
-    }
-
-    //Add the active class to the current/clicked button
-    this.className += " active";
     // Call the smoothScroll Function
     //console.log("trying smoothScroll now:");
     //Remember, scrollTarget will be whichever Navbar Item is clicked
+    console.log('5/23 ' + scrollTarget);
     smoothScroll(scrollTarget, 1000);
   })
 })
