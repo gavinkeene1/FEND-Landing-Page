@@ -13,24 +13,11 @@
  *
 */
 
-
 // Define Global Variables
  let navbar = document.getElementById('navbar__list');
  let sections = document.getElementsByTagName("section");
 
-/**
- * End Global Variables
- * Start Helper Functions
- *
-*/
 
-
-
-/**
- * End Helper Functions
- * Begin Main Functions
- *
-*/
 // Build the Navbar
 /* This For Loop runs through index.html to dynamically add an element
 to navbar__list for each section found in the HTML. Based on the
@@ -48,6 +35,15 @@ for (let i = 1; i < (sections.length + 1); i++) {
   navAnchor.text = sections[i-1].dataset.nav;
   navAnchor.classList.add('navbar__menu');
   navAnchor.classList.add('menu__link');
+
+
+/* Commented Out: The following on-click event conflicts with
+on-scroll event since both try to style Navbar links with a light
+blue background. The on-click event wants to do it instantly, but the
+on-scroll event wants to change background color of Navbar links as
+it scrolls over their corresponding page sections. There may be use
+for this on-click styling in the future if the conflict can be
+resolved.*/
 
 /*  navListItem.addEventListener("click", function() {
     let activeItems = document.getElementsByClassName("active");
@@ -80,6 +76,7 @@ function smoothScroll(section) {
 
 // Get all sections (by their anchor links) on the page
 const anchorLinks = document.querySelectorAll('a[href^="#"]');
+let pageSections = document.querySelectorAll('section');
 //console.log(anchorLinks);
 
 anchorLinks.forEach(link => {
@@ -97,23 +94,20 @@ anchorLinks.forEach(link => {
   })
 })
 
-// Add class 'active' to section when near top of viewport
+// Toggle the 'active' class of Navbar links and HTML page sections
+//based on which section is near the top of the viewport
 function changeAnchorState() {
   let sectionIndex = sections.length;
 
   while(--sectionIndex && window.scrollY + 50 < sections[sectionIndex].offsetTop) {}
-
   anchorLinks.forEach((link) => link.classList.remove('active'));
   anchorLinks[sectionIndex].classList.add('active');
+  pageSections.forEach((section) => section.classList.remove('active-section'));
+  pageSections[sectionIndex].classList.add('active-section');
 }
 
 changeAnchorState();
+
+// Update the 'active' state of Navbar links and page sections
+// whenever scrolling happens in the window
 window.addEventListener('scroll', changeAnchorState);
-
-/**
- * End Main Functions
- * Begin Events
- *
-*/
-
-// Build menu
