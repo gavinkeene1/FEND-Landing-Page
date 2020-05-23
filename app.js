@@ -13,11 +13,10 @@
  *
 */
 
-/**
- * Define Global Variables
- *
-*/
 
+// Define Global Variables
+ let navbar = document.getElementById('navbar__list');
+ let sections = document.getElementsByTagName("section");
 
 /**
  * End Global Variables
@@ -32,14 +31,11 @@
  * Begin Main Functions
  *
 */
-// build the nav
+// Build the Navbar
 /* This For Loop runs through index.html to dynamically add an element
 to navbar__list for each section found in the HTML. Based on the
 section being iterated over, the Loop also populates the newly created
 element with the section name as it appears on the webpage.*/
-let navbar = document.getElementById('navbar__list');
-let sections = document.getElementsByTagName("section");
-
 for (let i = 1; i < (sections.length + 1); i++) {
   let listItem = i;
   let navListItem = document.createElement('li');
@@ -53,7 +49,7 @@ for (let i = 1; i < (sections.length + 1); i++) {
   navAnchor.classList.add('navbar__menu');
   navAnchor.classList.add('menu__link');
 
-  navListItem.addEventListener("click", function() {
+/*  navListItem.addEventListener("click", function() {
     let activeItems = document.getElementsByClassName("active");
 
     // Toggle active classes based on the status of the anchor being
@@ -67,7 +63,7 @@ for (let i = 1; i < (sections.length + 1); i++) {
     // applicable), add an "active" class to the navbar link that's
     // been clicked.
     this.className += "active";
-  });
+  });*/
   }
 
 //Create scroll function taking into account a section's position.
@@ -102,7 +98,17 @@ anchorLinks.forEach(link => {
 })
 
 // Add class 'active' to section when near top of viewport
+function changeAnchorState() {
+  let sectionIndex = sections.length;
 
+  while(--sectionIndex && window.scrollY + 50 < sections[sectionIndex].offsetTop) {}
+
+  anchorLinks.forEach((link) => link.classList.remove('active'));
+  anchorLinks[sectionIndex].classList.add('active');
+}
+
+changeAnchorState();
+window.addEventListener('scroll', changeAnchorState);
 
 /**
  * End Main Functions
